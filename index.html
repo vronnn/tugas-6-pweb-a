@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.js"
+      integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrapper">
+        <div id="contact_form">
+          <form name="contact" action="">
+            <div class="input-box">
+              <label for="name" id="name_label">Name</label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                minlength="3"
+                placeholder="vron"
+                class="text-input"
+                required
+              />
+            </div>
+
+            <div class="input-box">
+              <label for="email" id="email_label">Email</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="example@gmail.com"
+                class="text-input"
+              />
+            </div>
+
+            <div class="input-box">
+              <label for="phone" id="phone_label">Phone</label>
+              <input
+                type="tel"
+                name="phone"
+                id="phone"
+                class="text-input"
+                placeholder="856-261-9988"
+              />
+            </div>
+
+            <input
+              type="submit"
+              name="submit"
+              class="button"
+              id="submit_btn"
+              value="Send"
+            />
+          </form>
+          <div class="greetings">
+            <h1>Contact US</h1>
+            <p>We are waiting to hear from you!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      $(function () {
+        function sendData($form) {
+          let dataString = $(this).serialize();
+
+          return $.ajax({
+            type: $form.attr("method"),
+            url: $form.attr("action"),
+            data: dataString,
+          });
+        }
+
+        $("form").validate({
+          rule: {
+            name: {
+              required: true,
+              minlength: 4,
+            },
+            email: {
+              required: true,
+              email: true,
+            },
+            phone: {
+              required: true,
+              minlength: 10,
+            },
+          },
+          messages: {
+            name: {
+              required: "This field is required",
+              minlength: "Name should be at least 3 characters",
+            },
+            email: {
+              required: "This field is required",
+              email: "The email should be in the format: abc@domain.com",
+            },
+            phone: {
+              required: "This field is required",
+              minlength: "Name should be at least 10 characters",
+            },
+          },
+        });
+
+        $("form").submit(function (e) {
+          e.preventDefault();
+          if ($(this).valid()) {
+            sendData($(this)).done(function () {
+              $("#contact_form").html(
+                "<div id='message' style='text-align:center; padding:20px; color:#3c6255'></div>"
+              );
+              $("#message")
+                .html("<h2>Contact Form Submitted!</h2>")
+                .append("<p>We will be in touch soon.</p>")
+                .hide()
+                .fadeIn(1500, function () {
+                  $("#message");
+                });
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
